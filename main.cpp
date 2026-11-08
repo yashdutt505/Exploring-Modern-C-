@@ -105,32 +105,18 @@ std::vector<Document> load_documents_parallel(const std::vector<std::string> &fi
 }
 int main()
 {
-    // Document doc = read_document("sample.txt");
-    // Document doc2 = read_document("sample2.txt");
-    Catalog catalog;
-    auto doc = read_document("sample.txt");
-    if (doc)
-    {
-        catalog.add(std::move(*doc));
-    }
+std::vector<std::string> filenames{
+    "sample.txt",
+    "sample2.txt",
+    "missing.txt"
+};
 
-    auto doc2 = read_document("sample2.txt");
-    if (doc2)
-    {
-        catalog.add(std::move(*doc2));
-    }
+auto documents = load_documents_parallel(filenames);
 
-    // catalog.print_all();
-    // std::cout<<catalog.size();
-    auto found_doc = catalog.find_by_name("sample.txt");
-    auto found_doc2 = catalog.find_by_name("sample4.txt");
-    if (found_doc)
-        std::cout << "Found document: " << found_doc->name << std::endl;
-    else
-        std::cout << "Document not found 1" << std::endl;
-    if (found_doc2)
-        std::cout << "Found document: " << found_doc2->name << std::endl;
-    else
-        std::cout << "Document not found 2" << std::endl;
-    // print(doc);
+Catalog catalog;
+for (Document& document : documents) {
+    catalog.add(std::move(document));
+}
+
+catalog.print_all();
 }
